@@ -5,6 +5,7 @@ import {
   Dimensions,
   TextInput,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import React, { useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
@@ -64,7 +65,7 @@ const LoginScreen = () => {
     }
   };
   return (
-    <View className="flex-1 pt-10 px-5">
+    <ScrollView className="flex-1 pt-5 px-5">
       <Text className="text-2xl font-medium mt-10">Log in to your account</Text>
       <View className="flex-1 mt-10">
         {alert && (
@@ -129,7 +130,7 @@ const LoginScreen = () => {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
