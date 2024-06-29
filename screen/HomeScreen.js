@@ -1,14 +1,29 @@
 import { View, Text, SafeAreaView, ScrollView, Touchable, TouchableOpacity, ActivityIndicator } from "react-native";
-import React, { useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { Entypo } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
+import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import { firestoreDB } from "../config/firebase.config";
 const HomeScreen = () => {
   const user = useSelector((state) => state.user.user);
-  const [isLoading, setIsLoading]=useState(false);
+  const [isLoading, setIsLoading]=useState(true);
+  const [chats,setChats] = useState(null);
+
+  useLayoutEffect(()=>{
+    const chatQuery = query(collection(firestoreDB, "chats"), orderBy("_id","desc"));
+
+    const unsubscribe = onSnapshot(chatQuery, (querySnapShot)=>{
+      const chatRooms = querySnapShot.docs.map((doc)=>doc.data());
+      setChats(chatRooms);
+      setIsLoading(false);
+    })
+
+    return unsubscribe;
+  },[]);
   const navigation = useNavigation();
   console.log("Logged user: ",user);
   return (
@@ -31,7 +46,6 @@ const HomeScreen = () => {
             <View className='w-full flex-row items-center justify-between'>
               <Text className='text-base font-semibold text-gray-400'>Message</Text>
               <TouchableOpacity onPress={()=>navigation.navigate('AddToChatScreen')}>
-
               <Entypo name="message" size={16} color="gray" />
               </TouchableOpacity>
             </View>
@@ -44,16 +58,11 @@ const HomeScreen = () => {
               </>
             ):(
               <>
-              <MessageCard/>
-              <MessageCard/>
-              <MessageCard/>
-              <MessageCard/>
-              <MessageCard/>
-              <MessageCard/>
-              <MessageCard/>
-              <MessageCard/>
-              <MessageCard/>
-              <MessageCard/>
+              {chats && chats?.length>0 ? (
+                chats.map((room)=>(
+                  <MessageCard key={room._id} room={room}/>
+                ))
+              ) : (<></>)}
               </>
             )}
           </View>
@@ -64,16 +73,17 @@ const HomeScreen = () => {
   );
 };
 
-const MessageCard =()=>{
+const MessageCard =({room})=>{
+  const navigation = useNavigation();
   return (
-    <TouchableOpacity className='w-full flex-row items-center justify-start py-2'>
+    <TouchableOpacity onPress={()=>navigation.navigate('ChatScreen', {room:room})} className='w-full flex-row items-center justify-start py-2'>
       {/* {images} */}
       <View className='h-16 w-16 rounded-full flex border-2 border-blue-500 items-center justify-center p-1'>
       <FontAwesome5 name="user-alt" size={20} color="blue" />
       </View>
       {/* content */}
       <View className='flex-1 flex items-start justify-center ml-4'>
-        <Text className='text-gray-500 font-bold text-base capitalize'>Message Title</Text>
+        <Text className='text-gray-500 font-bold text-base capitalize'>{room.chatName}</Text>
         <Text className='text-gray-400 text-sm'>Hey, i am there i whatsApp</Text>
       </View>
       {/* time text */}

@@ -8,6 +8,7 @@ import HomeScreen from "../screen/HomeScreen";
 import SplashScreen from "../screen/SplashScreen";
 import { initializeApp } from 'firebase/app';
 import AddToChatScreen from "../screen/AddToChatScreen";
+import ChatScreen from "../screen/ChatScreen";
 
 const Stack = createNativeStackNavigator();
 export default function AppNavigation() {
@@ -20,6 +21,7 @@ export default function AppNavigation() {
           <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
           <Stack.Screen name="HomeScreen" component={HomeScreen} />
           <Stack.Screen name="AddToChatScreen" component={AddToChatScreen}/>
+          <Stack.Screen name="ChatScreen" component={ChatScreen}/>
         </Stack.Navigator>
 
     </NavigationContainer>
