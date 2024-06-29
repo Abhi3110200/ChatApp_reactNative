@@ -14,7 +14,7 @@ const ChatScreen = ({route}) => {
     const [isLoading,setIsLoading] = useState(true)
   return (
     <View className='flex-1'>
-      <View className='w-full bg-blue-500 px-4 py-6 flex-[0.15] rounded-[20px]'>
+      <View className='w-full bg-blue-500 px-4 py-6 flex-[0.1] rounded-[20px]'>
         <View className='px-3 py-6 flex-row items-center justify-between w-full'>
             <View className='flex-row items-center space-x-3'>
             <TouchableOpacity onPress={()=>navigation.goBack()}>
@@ -22,9 +22,9 @@ const ChatScreen = ({route}) => {
             </TouchableOpacity>
 
             <View className='flex-row items-center justify-center space-x-3'>
-                <View className='rounded-full border p-2 border-white flex items-center justify-center'>
+                {/* <View className='rounded-full border p-2 border-white flex items-center justify-center'>
                 <FontAwesome5 name="user-friends" size={18} color="#fbfbfb" />
-                </View>
+                </View> */}
                 <View>
                     <Text className='capitalize font-semibold text-base text-gray-50'>{room.chatName.length>16 ? `${room.chatName.slice(0,16)}..` : room.chatName}{" "}</Text>
                     <Text className='text-sm text-gray-100 font-semibold capitalize'>online</Text>
@@ -44,13 +44,13 @@ const ChatScreen = ({route}) => {
 
       </View>
 
-      <View className='w-full px-4 '>
+      <View className='w-full px-4 flex-1'>
         <KeyboardAvoidingView className='flex-1' behavior={Platform.OS === 'android'? 'padding' : 'height'} keyboardVerticalOffset={160}>
             <>
                 <ScrollView>
                     {isLoading ? (
-                        <>
-                            <View className='w-full flex items-center justify-center z-10'>
+                    <>
+                            <View className='w-full flex items-center justify-center mt-2'>
                                 <ActivityIndicator size={'large'} color={'blue'}/>
                             </View>
                         </>
@@ -58,6 +58,17 @@ const ChatScreen = ({route}) => {
                         <></>
                     )}
                 </ScrollView>
+
+                <View className='w-full flex-row items-center justify-center px-8'>
+                    <View className='bg-gray-200 rounded-2xl px-4 py-2'>
+                        <TouchableOpacity>
+
+                        </TouchableOpacity>
+                        <TextInput
+                        placeholder='Type Here...'
+                        className='flex-1 h-8'/>
+                    </View>
+                </View>
             </>
         </KeyboardAvoidingView>
         
